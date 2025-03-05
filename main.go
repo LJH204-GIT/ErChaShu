@@ -99,8 +99,23 @@ func deleteNode(n *Node) *Node {
 	return nil
 }
 
-func FoundNode(num int) *Node {
-	for ; ; {
+func FoundNode(num int, root *Node, a *Node) *Node {
+	a = root
+	for {
+		if a == nil {
+			return nil
+		}
+		if a.value == num {
+			return a
+		}
+		if num < a.value {
+			a = a.left
+			continue
+		}
+		if num > a.value {
+			a = a.right
+			continue
+		}
 
 	}
 }
@@ -112,5 +127,6 @@ func main() {
 	fmt.Println(LevelOrder(root))
 	DeleteNode(root.right, root)
 	fmt.Println(LevelOrder(root))
-
+	a := FoundNode(165, root, &Node{})
+	println(a.value)
 }
