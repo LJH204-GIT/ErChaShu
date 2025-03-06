@@ -193,55 +193,65 @@ func FoundNode(num int, root *Node, a *Node) *Node {
 }
 
 // PRF ==============================
-func PRF(root *Node, node *Node) {
+func PRF(root *Node, node *Node, a *bool) {
 	if root.left != nil {
-		PRF(root.left, node)
+		PRF(root.left, node, a)
 	}
 	if root.left == nil {
 		root.left = node
+		*a = true
 	}
 }
-func DNM(root *Node, node *Node) {
+func DNM(root *Node, node *Node, a *bool) {
 	if root.right == node {
 		if node.left == nil {
 			root.right = node.right
+			*a = true
 			return
 		}
 		if node.left == nil && node.right == nil {
 			root.right = nil
+			*a = true
 			return
 		}
 		root.right = node.right
-		PRF(root.right, node.left)
+		PRF(root.right, node.left, a)
 		return
 	}
 	if root.left == node {
 		if node.right == nil {
 			root.left = node.left
+			*a = true
 			return
 		}
 		if node.left == nil && node.right == nil {
 			root.left = nil
+			*a = true
 			return
 		}
 		root.left = node.right
-		PRF(root.left, node.left)
+		PRF(root.left, node.left, a)
 		return
 	}
 	if root.left != nil {
-		DNM(root.left, node)
-		DNM(root.right, node)
+		DNM(root.left, node, a)
+	}
+	if root.right != nil {
+		if !*a {
+			DNM(root.right, node, a)
+		}
 	}
 }
 
 // =====================================
 func main() {
-	arr := []int{100, 50, 25, 150 /*, 125*/, 175 /* 115, 135,*/, 165, 200, 160, 170, 180, 210}
+	arr := []int{100, 50, 25, 10, 30, 75, 150, 125, 175, 115, 135, 165, 200, 160, 170, 180, 210, 230}
 	root := &Node{value: 0}
 	BuildTree(arr, root)
 	fmt.Println(LevelOrder(root))
 	//DeleteNode(root.right, root)
-	DNM(root, root.right) // 最佳递归删节点
+	var a bool = false
+	DNM(root, root.left.left, &a) // 最佳递归删节点
 
 	fmt.Println(LevelOrder(root))
 	//a := FoundNode(165, root, &Node{})
