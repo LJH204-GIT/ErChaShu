@@ -230,8 +230,6 @@ func DNM(root *Node, node *Node) {
 	}
 	if root.left != nil {
 		DNM(root.left, node)
-	}
-	if root.left != nil {
 		DNM(root.right, node)
 	}
 }
