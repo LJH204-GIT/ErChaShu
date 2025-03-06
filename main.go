@@ -241,7 +241,7 @@ func main() {
 	BuildTree(arr, root)
 	fmt.Println(LevelOrder(root))
 	//DeleteNode(root.right, root)
-	DNM(root, root.right) // 最佳递归去节点
+	DNM(root, root.right) // 最佳递归删节点
 
 	fmt.Println(LevelOrder(root))
 	//a := FoundNode(165, root, &Node{})
