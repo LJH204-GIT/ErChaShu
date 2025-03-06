@@ -99,6 +99,78 @@ func deleteNode(n *Node) *Node {
 	return nil
 }
 
+func deleteNode1(root *Node, node *Node) *Node {
+	if root.left == node || root.right == node {
+		return root
+	}
+	if root.left == nil && root.right == nil {
+		return nil
+	}
+
+	temp := deleteNode1(root.left, node)
+
+	if temp == nil {
+		temp = deleteNode1(root.right, node)
+	}
+	return temp
+}
+
+func DDeleteNode(root *Node, node *Node) {
+	a := deleteNode1(root, node) // 找父节点
+	if a.left == node {
+		a.left = node.left
+		add2(node.left, node.right)
+
+	}
+	if a.right == node {
+		a.right = node.right
+		add1(node.right, node.left)
+	}
+}
+func add1(root *Node, add *Node) {
+	if root.left == nil && root.right == nil {
+		root.left = add
+		return
+	}
+	if root.left != nil {
+		add1(root.left, add)
+	}
+}
+func add2(root *Node, add *Node) {
+	if root.left == nil && root.right == nil {
+		root.right = add
+		return
+	}
+	if root.right != nil {
+		add1(root.right, add)
+	}
+}
+func add3(father *Node, node *Node) {
+	if node == father.left {
+
+	}
+	if node.left == nil && node.right == nil {
+
+	}
+}
+
+//func deleteNode21(des *Node) *Node {
+//	if des.right == nil && des.left == nil {
+//		return des
+//	}
+//	temp := deleteNode21(des.right)
+//	temp.left = des.left
+//	return des
+//}
+//func deleteNode22(des *Node) *Node {
+//	if des.right == nil && des.left == nil {
+//		return des
+//	}
+//	temp := deleteNode22(des.left)
+//	temp.right = des.right
+//	return des
+//}
+
 func FoundNode(num int, root *Node, a *Node) *Node {
 	a = root
 	for {
@@ -120,13 +192,60 @@ func FoundNode(num int, root *Node, a *Node) *Node {
 	}
 }
 
+// PRF ==============================
+func PRF(root *Node, node *Node) {
+	if root.left != nil {
+		PRF(root.left, node)
+	}
+	if root.left == nil {
+		root.left = node
+	}
+}
+func DNM(root *Node, node *Node) {
+	if root.right == node {
+		if node.left == nil {
+			root.right = node.right
+			return
+		}
+		if node.left == nil && node.right == nil {
+			root.right = nil
+			return
+		}
+		root.right = node.right
+		PRF(root.right, node.left)
+		return
+	}
+	if root.left == node {
+		if node.right == nil {
+			root.left = node.left
+			return
+		}
+		if node.left == nil && node.right == nil {
+			root.left = nil
+			return
+		}
+		root.left = node.right
+		PRF(root.left, node.left)
+		return
+	}
+	if root.left != nil {
+		DNM(root.left, node)
+	}
+	if root.left != nil {
+		DNM(root.right, node)
+	}
+}
+
+// =====================================
 func main() {
-	arr := []int{100, 50, 150, 125, 175, 115, 135, 165, 200, 160, 170, 180, 210}
+	arr := []int{100, 50, 25, 150 /*, 125*/, 175 /* 115, 135,*/, 165, 200, 160, 170, 180, 210}
 	root := &Node{value: 0}
 	BuildTree(arr, root)
 	fmt.Println(LevelOrder(root))
-	DeleteNode(root.right, root)
+	//DeleteNode(root.right, root)
+	DNM(root, root.right) // 最佳递归去节点
+
 	fmt.Println(LevelOrder(root))
-	a := FoundNode(165, root, &Node{})
-	println(a.value)
+	//a := FoundNode(165, root, &Node{})
+	//println(a.value)
 }
